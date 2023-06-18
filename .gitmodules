@@ -1,0 +1,3 @@
+[submodule "model/oh-my-papers"]
+	path = model/oh-my-papers
+	url = https://github.com/Razvan00Rusu/oh-my-papers.git
