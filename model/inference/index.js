@@ -4,7 +4,7 @@ let cors = require("cors");
 let z = require("zod");
 let UnixSocket = require("unix-domain-socket");
 const yargs = require("yargs/yargs");
-
+const { hideBin } = require('yargs/helpers');
 const args = yargs(hideBin(process.argv)).argv;
 
 let INFERENCE_REQUEST = require("./inference_request.js");
@@ -34,7 +34,7 @@ us.payloadAsJSON();
 
 let app = express(cors());
 app.get("/", bodyParser.json(), (req, res) => {
-  console.log(`INFO: Received request. Request Body: ${req.body}`);
+  console.log(`INFO: Received request. Request Body: ${JSON.stringify(req.body)}`);
   try {
     INFERENCE_REQUEST.parse(req.body);
   } catch (e) {
@@ -48,6 +48,29 @@ app.get("/", bodyParser.json(), (req, res) => {
   us.send(dataToSend, (response) => {
     res.json(response);
   });
+  // res.status(200).json({
+  //   inference: [
+  //     {
+  //       result: [
+  //         {
+  //           title: "Citation recommendation: approaches and datasets",
+  //           abstract: "",
+  //           venue: "IJDL",
+  //           year: 2020,
+  //           author: "Michael Färber and Adam Jatowt",
+  //           id: 1,
+  //         }, {
+  //           title: "Context sensitive article ranking with citation context analysis",
+  //           abstract: "",
+  //           venue: "Scientometrics",
+  //           year: 2016,
+  //           author: "Metin Doslu and Haluk O. Bingol",
+  //           id: 2,
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // })
   res.status(200);
 });
 
